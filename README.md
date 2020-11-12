@@ -26,12 +26,13 @@ To use this configration you will need to install [nodeJS](https://nodejs.org/) 
 
 3) Install the node modules needed with the following command (you may need sudo on linux).
 
+```
     yarn global add \
         babel-eslint \
         csslint \
         eslint-plugin-vue \
         eslint_d \
-        instant-markdown
+```
 
 ## Global Settings
 
