@@ -1,7 +1,7 @@
 NVimFiles
 ===
 
-This is my VIM configuration, it uses [Vundle](https://github.com/VundleVim/Vundle.vim) to manage plugins, NERDTree, YouCompleteMe, Syntastic, UltiSnips and other fancy plugins.
+This is my VIM configuration, it uses [Vim-Plug](https://github.com/junegunn/vim-plug) to manage plugins, NERDTree, Deoplete, Ale, UltiSnips and other fancy plugins.
 
 ## Table of contents
 
@@ -24,7 +24,14 @@ To use this configration you will need to install [nodeJS](https://nodejs.org/) 
 
 2) Install the plugins with the `:PlugInstall` command
 
-3) Install the node modules needed with the `install-node-modules.sh` script.
+3) Install the node modules needed with the following command (you may need sudo on linux).
+
+    yarn global add \
+        babel-eslint \
+        csslint \
+        eslint-plugin-vue \
+        eslint_d \
+        instant-markdown
 
 ## Global Settings
 
