@@ -1,0 +1,22 @@
+snippet vuexStore "description"
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+  },
+  mutations: {
+  },
+  actions: {
+  },
+  getters: {
+  },
+})
+endsnippet
+
+snippet addVuetifyLoaderPlugin "description"
+const EncodingPlugin = require('webpack-encoding-plugin')
+module.exports.plugins.push(new VuetifyLoaderPlugin())
+endsnippet

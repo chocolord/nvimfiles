@@ -1,0 +1,91 @@
+snippet component "description" b
+<template>
+  <div id="#app">
+  </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+    }
+  },
+  props: { },
+  computed: { },
+  components: { },
+  filters: { },
+  methods: { },
+  mounted () { }
+}
+</script>
+
+<style>
+#app {
+}
+</style>
+endsnippet
+
+snippet vtag "<v-tag></v-tag>"
+<v-$1$2> $0 </v-${1/\s.*//}>
+endsnippet
+
+snippet <v "<v-tag></v-tag>"
+<v-$1> $0 </v-${1/\s.*//}>
+endsnippet
+
+snippet < "<tag></tag>"
+<$1> $0 </${1/\s.*//}>
+endsnippet
+
+snippet tag "<tag></tag>"
+<$1> $0 </${1/\s.*//}>
+endsnippet
+
+snippet VTag "<v-tag>\n</v-tag>" b
+<v-$1>
+  $2
+</v-${1/\s.*//}>
+endsnippet
+
+snippet Tag "<tag>\n</tag>" b
+<$1>
+  $2
+</${1/\s.*//}>
+endsnippet
+
+snippet slot "v-slot:slot={ props }"
+v-slot:${1:slot}="{ ${2:props} }"
+endsnippet
+
+snippet activator "v-slot:activator={ on }"
+v-slot:activator="{ ${1:on} }"
+endsnippet
+
+snippet VTextField
+<v-text-field label="$1" v-model="$2"$3>$4</v-text-field>
+endsnippet
+
+snippet VTextField:ro
+<v-text-field label="$1" v-model="$2"$3 readonly>$4</v-text-field>
+endsnippet
+
+snippet VTextField:activator
+<v-text-field label="$1" v-model="$2"$3 readonly v-on="on">$4</v-text-field>
+endsnippet
+
+snippet VCard "v-card skeleton" b
+<v-card>
+  <v-card-title> $1 </v-card-title>
+  <v-card-text>
+  	$2
+  </v-card-text>
+  <v-card-actions>
+  	$3
+  </v-card-actions>
+</v-card>
+endsnippet
+
+snippet eslint-disable-line "disable eslint comment"
+// eslint-disable-line ${1:rule-name}
+endsnippet
+

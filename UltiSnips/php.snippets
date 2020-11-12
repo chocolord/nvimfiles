@@ -1,0 +1,110 @@
+snippet todo "description"
+// TODO: 
+endsnippet
+	
+snippet symfony:controller:action "Action in a Symfony controller"
+/**
+ * $1 Action
+ *
+ * @Route(name="$2")
+ */
+public function $1Action()
+{
+	return $this->render("app_$3_${4:${3/.*/\L$0\E}}"), [
+	]);
+}
+endsnippet
+	
+snippet symfony:controller:form "Form to handle a POST request for an entity" b
+$form = $this->createForm($1Type::class, \$$2);
+
+$form->handleRequest($request);
+
+if ($form->isSubmitted() && $form->isValid()) {
+	\$$2 = $form->getData();
+
+	$em = $this->getDoctrine()->getManager();
+	// $em->persist(\$$2); // si add
+	$em->flush();
+
+	return $this->redirectToRoute("app_${1/.*/\L$0\E/}_index");
+}
+
+return $this->render('AppBundle:$1:$3.html.twig', array(
+	"form" => \$form->createView()
+));
+endsnippet
+
+snippet symfony:entity:mapped_property "New property mapped" b
+/**
+ * @var $1
+ *
+ * @ORM\Column(name="$2", type="${3:$1}", nullable=${4:true})
+ */
+private \$${5:${2/_(\w)/\u$1/g}};
+
+endsnippet
+
+snippet symfony:entity:getter "Getter for a symfony entity property" b
+/**
+ * Get $1
+ *
+ * @return $2
+ */
+public function get${1/.*/\u$0/}()
+{
+	return ${3:\$this->$1};
+}
+
+endsnippet
+
+snippet symfony:entity:setter "Setter for a sumfony entity property" b
+/**
+ * Set $1.
+ *
+ * @param $2 \$$1
+ *
+ * @return $3
+ */
+public function set${1/.*/\u$0/}(\$$1 = null)
+{
+	$this->$1 = \$$1;
+
+	return $this;
+}
+
+endsnippet
+	
+snippet symfony:entity:mapped_property_full "New property mapped with gettter and setter" b
+/**
+ * @var $1
+ *
+ * @ORM\Column(name="$2", type="${3:$1}", nullable=${4:true})
+ */
+private \$${5:${2/_(\w)/\u$1/g}};
+
+/**
+ * Get $5
+ *
+ * @return $1
+ */
+public function get${5/.*/\u$0/}()
+{
+	return \$this->$5;
+}
+
+/**
+ * Set $5.
+ *
+ * @param $1 \$$5
+ *
+ * @return $6
+ */
+public function set${5/.*/\u$0/}(\$$5 = null)
+{
+	$this->$5 = \$$5;
+
+	return $this;
+}
+
+endsnippet
