@@ -1,12 +1,17 @@
+" starts python3
+let g:python3_host_prog = 'python'
+
 source ~/AppData/Local/nvim/plug.vim
 
 call plug#begin('~/AppData/Local/nvim/plugged')
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'scrooloose/nerdtree'
 Plug 'dense-analysis/ale'
 
-Plug 'flazz/vim-colorschemes'       "colorschemes
+" Plug 'neovim/nvim-lspconfig'        "LSP client/framework
+
+Plug 'scrooloose/nerdtree'          "file explorer
+" Plug 'flazz/vim-colorschemes'       "colorschemes
 Plug 'yggdroot/indentline'          "indentations
 Plug 'tpope/vim-surround'           "surrounding
 Plug 'tommcdo/vim-lion'             "alignement
@@ -19,20 +24,18 @@ Plug 'honza/vim-snippets'           "Common snippets
 Plug 'terryma/vim-multiple-cursors' "Multiple cursors
 
 Plug 'evidens/vim-twig'             "Twig syntax colors
-Plug 'digitaltoad/vim-pug'          "Pug syntax colors
-Plug 'kchmck/vim-coffee-script'     "CoffeeScript sybtax & Cie
 Plug 'posva/vim-vue'                "Vue files syntax colors
 
-Plug 'vim-scripts/npm'               "NPM cli tool
 Plug 'roxma/vim-encode'              "encode strings
-" Plug 'suan/vim-instant-markdown'     "apercu markdown live
+
+Plug 'morhetz/gruvbox'               "gruvbox colorscheme
 
 call plug#end()
 
-set ai nu ts=4 sw=4 expandtab noswapfile nocompatible modeline modelines=5 nohls mouse=a
+set ai nu ts=4 sw=4 expandtab noswapfile nocompatible modeline modelines=5 nohls mouse=a fileformat=unix scrolloff=6 clipboard+=unnamedplus
 set vb t_vb=
 syntax on
-colorscheme deus
+colorscheme gruvbox
 
 set fileencodings=utf-8
 set fileencoding=utf-8
@@ -41,6 +44,7 @@ set encoding=utf-8
 let mapleader = "-"
 
 inoremap jk <esc>
+inoremap JK <esc>
 inoremap <c-space> <c-n>
 inoremap <c-h> <left>
 inoremap <c-j> <down>
@@ -55,9 +59,10 @@ nnoremap <leader>do :diffoff<CR>
 nnoremap <leader>du :diffupdate<CR>
 nnoremap <leader>tn :tabnew<CR>
 nnoremap <leader>tc :tabclose<CR>
-nnoremap nt :NERDTreeToggle<CR>
-nnoremap nf :NERDTreeFind 
-nnoremap nb :NERDTreeFromBookmark 
+nnoremap <leader>nt :NERDTreeToggle<CR>
+nnoremap <leader>nf :NERDTreeFind 
+nnoremap <leader>nb :NERDTreeFromBookmark 
+nnoremap <leader>bn :BlocNotes<CR>
 
 " Copy-Past mappgins
 inoremap <S-Insert> <C-R>*
@@ -72,13 +77,11 @@ endfunction
 function! Latin1()
 	edit ++enc=latin1
     call deoplete#disable()
-	" call youcompleteme#DisableCursorMovedAutocommands()
 endfunction
 
 function! Utf8()
 	edit ++enc=utf8
     call deoplete#enable()
-	" call youcompleteme#EnableCursorMovedAutocommands()
 endfunction
 
 function! LinterStatus() abort
@@ -104,9 +107,23 @@ function! LinterStatus() abort
     return l:counts.total == 0 ? '' : printf('%dW %dE', all_warnings, all_errors)
 endfunction
 
+function! NewSemaine()
+    let l:monday = localtime() - (strftime('%w') - 1)*24*60*60
+    normal o_________________________________
+    normal o
+    put =strftime('%A %d/%m', l:monday) 
+    normal _vU
+    for d in [1,2,3,4]
+        normal o
+        put =strftime('%A %d/%m', l:monday+24*60*60*d)
+        normal _vU
+    endfor
+endfunction
+
 command! -n=0 TODO call TODO()
 command! -n=0 PointSemaine :!start C:\Users\user\vimfiles\bin\pointSemaine.bat
-command! -n=0 NewSemaine :normal Ilundi <esc>Yp<C-A>p2<C-A>p3<C-A>p4<C-A>_~_k_~_k_~_k_~_k_~_o<esc>Yjpjpjpj
+command! -n=0 BlocNotes :tabnew
+command! -n=0 NewSemaine :call NewSemaine()
 command! -n=0 Latin1 call Latin1()
 command! -n=0 Utf8 call Utf8()
 command! -n=0 StartEslintD !eslint_d start
@@ -127,16 +144,11 @@ set statusline+=%c,%l/%L " column,line/lines
 let g:UltiSnipsExpandTrigger="²²"
 
 let g:UltiSnipsSnippetDirectories=['~/AppData/Local/nvim/UltiSnips']
-let g:UltiSnipsSnippetDirectories=[$HOME.'/vimfiles/UltiSnips']
 let g:UltiSnipsJumpForwardTrigger="<c-l>"
 let g:UltiSnipsJumpBackwardTrigger="<c-h>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
-
-if exists('no_ycm') && no_ycm
-    Latin1
-endif
 
 " NERDCommenter Configuraiton
 let g:NERDSpaceDelims = 1 " Add spaces after comment delimiters by default
@@ -172,10 +184,3 @@ endfunction
 function g:Multiple_cursors_after()
   call deoplete#custom#buffer_option('auto_complete', v:true)
 endfunction
-
-let g:python3_host_prog = 'python'
-
-
-
-
-

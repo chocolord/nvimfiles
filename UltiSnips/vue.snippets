@@ -25,6 +25,10 @@ export default {
 </style>
 endsnippet
 
+snippet hawaiApp "sets window.app if env==dev" b
+if (/^hawai(-dev)?$/.test(window.location.hostname)) window.app = this
+endsnippet
+
 snippet vtag "<v-tag></v-tag>"
 <v-$1$2> $0 </v-${1/\s.*//}>
 endsnippet
@@ -51,6 +55,37 @@ snippet Tag "<tag>\n</tag>" b
 <$1>
   $2
 </${1/\s.*//}>
+endsnippet
+
+
+snippet VRow "<v-row>\n</v-row>" b
+<v-row>
+  $0
+</v-row>
+endsnippet
+
+snippet VCol "<v-col cols='12'>\n</v-col>" b
+<v-col cols="${1:12}">
+  $0
+</v-col>
+endsnippet
+
+snippet VCol-s "<v-col cols='12' sm='6'>\n</v-col>" b
+<v-col cols="${1:12}" sm="${2:6}">
+  $0
+</v-col>
+endsnippet
+
+snippet VCol-sm "<v-col cols='12' sm='6' md='4'>\n</v-col>" b
+<v-col cols="${1:12}" sm="${2:6}" md="${3:4}">
+  $0
+</v-col>
+endsnippet
+
+snippet VCol-sml "<v-col cols='12' sm='6' md='4' lg='3'>\n</v-col>" b
+<v-col cols="${1:12}" sm="${2:6}" md="${3:4}" lg="${4:3}">
+  $0
+</v-col>
 endsnippet
 
 snippet slot "v-slot:slot={ props }"
