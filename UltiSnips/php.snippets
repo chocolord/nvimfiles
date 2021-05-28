@@ -115,3 +115,11 @@ ${1:public} function ${2:method}(${3:params})
 	$0
 }
 endsnippet
+
+snippet loadModel "loads a model class"
+require_once(__DIR__ . "$1/../../include/classe_pages_sahe/class_$2.php");
+endsnippet
+	
+snippet loadEntity "load an entity from database"
+$$1 = new C${2:${1/.*/\u$0/}}(${3:\$_POST["id_$1"]});
+endsnippet

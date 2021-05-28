@@ -1,9 +1,10 @@
 " starts python3
-let g:python3_host_prog = 'python'
+let g:python_host_prog = '/usr/bin/python'
+let g:python3_host_prog = '/usr/bin/python3'
 
-source ~/AppData/Local/nvim/plug.vim
+source ~/.config/nvim/plug.vim
 
-call plug#begin('~/AppData/Local/nvim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'dense-analysis/ale'
@@ -26,9 +27,11 @@ Plug 'terryma/vim-multiple-cursors' "Multiple cursors
 Plug 'evidens/vim-twig'             "Twig syntax colors
 Plug 'posva/vim-vue'                "Vue files syntax colors
 
-Plug 'roxma/vim-encode'              "encode strings
+Plug 'tpope/vim-fugitive'           "Git wrapper
 
-Plug 'morhetz/gruvbox'               "gruvbox colorscheme
+Plug 'roxma/vim-encode'             "encode strings
+
+Plug 'morhetz/gruvbox'              "gruvbox colorscheme
 
 call plug#end()
 
@@ -43,6 +46,7 @@ set encoding=utf-8
 
 let mapleader = "-"
 
+" insertion mappings
 inoremap jk <esc>
 inoremap JK <esc>
 inoremap <c-space> <c-n>
@@ -50,6 +54,8 @@ inoremap <c-h> <left>
 inoremap <c-j> <down>
 inoremap <c-k> <up>
 inoremap <c-l> <right>
+
+"normal mode mappings
 nnoremap <c-j> 30j
 nnoremap <c-k> 30k
 nnoremap <leader><c-s> :setl hls!<CR>
@@ -58,20 +64,29 @@ nnoremap <leader>dt :diffthis<CR>
 nnoremap <leader>do :diffoff<CR>
 nnoremap <leader>du :diffupdate<CR>
 nnoremap <leader>tn :tabnew<CR>
+nnoremap <leader>tsh :tabnew<CR>:terminal<CR>A
 nnoremap <leader>tc :tabclose<CR>
 nnoremap <leader>nt :NERDTreeToggle<CR>
 nnoremap <leader>nf :NERDTreeFind 
 nnoremap <leader>nb :NERDTreeFromBookmark 
 nnoremap <leader>bn :BlocNotes<CR>
 
+" terminal mappgins
+tnoremap <Esc> <C-\><C-n>
+tnoremap <c-j><c-k> <C-\><C-n>
+
+" Visual mapping to execute the selection
+vnoremap <c-x> "xy:@x<CR>
+
 " Copy-Past mappgins
 inoremap <S-Insert> <C-R>*
 
 " Ouvre le fichier du point de la semaine et le fichier de l'activité.
 function! TODO()
-	tabnew $HOME/OneDrive\ -\ IZITEK/point\ semaine.txt
-	vsplit $HOME/OneDrive\ -\ IZITEK/activite\ semaine.txt
-	normal G$
+    echo "TODO: repare TODO()"
+  	tabnew ~user/windows/home/OneDrive\ -\ IZITEK/point\ semaine.txt
+  	vsplit ~user/windows/home/OneDrive\ -\ IZITEK/activite\ semaine.txt
+  	normal G$
 endfunction
 
 function! Latin1()
@@ -118,10 +133,15 @@ function! NewSemaine()
         put =strftime('%A %d/%m', l:monday+24*60*60*d)
         normal _vU
     endfor
+    :%s/\<Monday\>/Lundi
+    :%s/\<Tuesday\>/Mardi
+    :%s/\<Wednesday\>/Mercredi
+    :%s/\<Thursday\>/Jeudi
+    :%s/\<Friday\>/Vendredi
 endfunction
 
 command! -n=0 TODO call TODO()
-command! -n=0 PointSemaine :!start C:\Users\user\vimfiles\bin\pointSemaine.bat
+" command! -n=0 PointSemaine :!start C:\Users\user\vimfiles\bin\pointSemaine.bat
 command! -n=0 BlocNotes :tabnew
 command! -n=0 NewSemaine :call NewSemaine()
 command! -n=0 Latin1 call Latin1()
@@ -143,7 +163,7 @@ set statusline+=%c,%l/%L " column,line/lines
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="²²"
 
-let g:UltiSnipsSnippetDirectories=['~/AppData/Local/nvim/UltiSnips']
+let g:UltiSnipsSnippetDirectories=['~/.config/nvim/UltiSnips']
 let g:UltiSnipsJumpForwardTrigger="<c-l>"
 let g:UltiSnipsJumpBackwardTrigger="<c-h>"
 
@@ -184,3 +204,5 @@ endfunction
 function g:Multiple_cursors_after()
   call deoplete#custom#buffer_option('auto_complete', v:true)
 endfunction
+
+echom "remplir le point"

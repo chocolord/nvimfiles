@@ -1,6 +1,36 @@
+snippet component-root "description" b
+<template>
+  <v-app>
+  </v-app>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+	  r_ajax: null
+    }
+  },
+  props: { },
+  computed: { },
+  components: { },
+  filters: { },
+  methods: { },
+  created () {
+  	if (window.location.hostname == 'localhost') window.app = this
+  }
+}
+</script>
+
+<style>
+#app {
+}
+</style>
+endsnippet
+
 snippet component "description" b
 <template>
-  <div id="#app">
+  <div>
   </div>
 </template>
 
@@ -15,7 +45,7 @@ export default {
   components: { },
   filters: { },
   methods: { },
-  mounted () { }
+  created () { }
 }
 </script>
 
@@ -124,3 +154,6 @@ snippet eslint-disable-line "disable eslint comment"
 // eslint-disable-line ${1:rule-name}
 endsnippet
 
+snippet "_([^\s]+) ([^\s]+)" "FormData append key" br
+f.append("`!p snip.rv = match.group(1)`", `!p snip.rv = match.group(2)`)
+endsnippet
