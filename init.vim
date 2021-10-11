@@ -7,9 +7,13 @@ source ~/.config/nvim/plug.vim
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'dense-analysis/ale'
+" Plug 'dense-analysis/ale'
 
-" Plug 'neovim/nvim-lspconfig'        "LSP client/framework
+Plug 'neovim/nvim-lspconfig'        "LSP client/framework
+
+" PhpActor
+Plug 'phpactor/phpactor', {'for': 'php', 'tag': '*'}
+Plug 'kristijanhusak/deoplete-phpactor'
 
 Plug 'scrooloose/nerdtree'          "file explorer
 " Plug 'flazz/vim-colorschemes'       "colorschemes
@@ -17,6 +21,11 @@ Plug 'yggdroot/indentline'          "indentations
 Plug 'tpope/vim-surround'           "surrounding
 Plug 'tommcdo/vim-lion'             "alignement
 Plug 'tpope/vim-speeddating'        "manipulations de dates
+
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'ryanoasis/vim-devicons'
+" Plug 'romgrk/barbar.nvim'           "supertab line
+Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'} "superstatus line
 
 Plug 'preservim/nerdcommenter'      "The NERD Commenter
 Plug 'SirVer/ultisnips'             "Snippets engine
@@ -28,10 +37,10 @@ Plug 'evidens/vim-twig'             "Twig syntax colors
 Plug 'posva/vim-vue'                "Vue files syntax colors
 
 Plug 'tpope/vim-fugitive'           "Git wrapper
-
 Plug 'roxma/vim-encode'             "encode strings
-
 Plug 'morhetz/gruvbox'              "gruvbox colorscheme
+
+Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
 
 call plug#end()
 
@@ -45,6 +54,7 @@ set fileencoding=utf-8
 set encoding=utf-8
 
 let mapleader = "-"
+nmap <space> -
 
 " insertion mappings
 inoremap jk <esc>
@@ -70,6 +80,9 @@ nnoremap <leader>nt :NERDTreeToggle<CR>
 nnoremap <leader>nf :NERDTreeFind 
 nnoremap <leader>nb :NERDTreeFromBookmark 
 nnoremap <leader>bn :BlocNotes<CR>
+nnoremap <leader>B <c-V>
+nnoremap <leader>p :Leaderf file<CR>
+nnoremap <leader>P :Leaderf 
 
 " terminal mappgins
 tnoremap <Esc> <C-\><C-n>
@@ -83,10 +96,10 @@ inoremap <S-Insert> <C-R>*
 
 " Ouvre le fichier du point de la semaine et le fichier de l'activité.
 function! TODO()
-    echo "TODO: repare TODO()"
   	tabnew ~user/windows/home/OneDrive\ -\ IZITEK/point\ semaine.txt
   	vsplit ~user/windows/home/OneDrive\ -\ IZITEK/activite\ semaine.txt
-  	normal G$
+    setl filetype=todo
+  	normal G7k
 endfunction
 
 function! Latin1()
@@ -99,28 +112,28 @@ function! Utf8()
     call deoplete#enable()
 endfunction
 
-function! LinterStatus() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
-
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_warnings = l:counts.warning + l:counts.style_warning
-
-    if l:counts.error > 0
-        let l:problem = ale#statusline#FirstProblem(bufnr(''), 'error')
-        echom printf('line %d, col %d: %s', problem.lnum, problem.col, problem.text)
-    elseif l:counts.style_error
-        let l:problem = ale#statusline#FirstProblem(bufnr(''), 'style_error')
-        echom printf('line %d, col %d: %s', problem.lnum, problem.col, problem.text)
-    elseif l:counts.warning
-        let l:problem = ale#statusline#FirstProblem(bufnr(''), 'warning')
-        echom printf('line %d, col %d: %s', problem.lnum, problem.col, problem.text)
-    elseif l:counts.style_warning
-        let l:problem = ale#statusline#FirstProblem(bufnr(''), 'style_warning')
-        echom printf('line %d, col %d: %s', problem.lnum, problem.col, problem.text)
-    endif
-
-    return l:counts.total == 0 ? '' : printf('%dW %dE', all_warnings, all_errors)
-endfunction
+" function! LinterStatus() abort
+"     let l:counts = ale#statusline#Count(bufnr(''))
+"
+"     let l:all_errors = l:counts.error + l:counts.style_error
+"     let l:all_warnings = l:counts.warning + l:counts.style_warning
+"
+"     if l:counts.error > 0
+"         let l:problem = ale#statusline#FirstProblem(bufnr(''), 'error')
+"         echom printf('line %d, col %d: %s', problem.lnum, problem.col, problem.text)
+"     elseif l:counts.style_error
+"         let l:problem = ale#statusline#FirstProblem(bufnr(''), 'style_error')
+"         echom printf('line %d, col %d: %s', problem.lnum, problem.col, problem.text)
+"     elseif l:counts.warning
+"         let l:problem = ale#statusline#FirstProblem(bufnr(''), 'warning')
+"         echom printf('line %d, col %d: %s', problem.lnum, problem.col, problem.text)
+"     elseif l:counts.style_warning
+"         let l:problem = ale#statusline#FirstProblem(bufnr(''), 'style_warning')
+"         echom printf('line %d, col %d: %s', problem.lnum, problem.col, problem.text)
+"     endif
+"
+"     return l:counts.total == 0 ? '' : printf('%dW %dE', all_warnings, all_errors)
+" endfunction
 
 function! NewSemaine()
     let l:monday = localtime() - (strftime('%w') - 1)*24*60*60
@@ -141,6 +154,7 @@ function! NewSemaine()
 endfunction
 
 command! -n=0 TODO call TODO()
+nnoremap <leader>todo :TODO<CR>
 " command! -n=0 PointSemaine :!start C:\Users\user\vimfiles\bin\pointSemaine.bat
 command! -n=0 BlocNotes :tabnew
 command! -n=0 NewSemaine :call NewSemaine()
@@ -148,13 +162,13 @@ command! -n=0 Latin1 call Latin1()
 command! -n=0 Utf8 call Utf8()
 command! -n=0 StartEslintD !eslint_d start
 
-set statusline=%F " Full path of current file
-set statusline+=\ %y " filetype of current file
-set statusline+=\ %m " modified status
-set statusline+=%= " section separation
-set statusline+=%{LinterStatus()}
-set statusline+=%= " section separation
-set statusline+=%c,%l/%L " column,line/lines
+" set statusline=%F " Full path of current file
+" set statusline+=\ %y " filetype of current file
+" set statusline+=\ %m " modified status
+" set statusline+=%= " section separation
+" set statusline+=%{LinterStatus()}
+" set statusline+=%= " section separation
+" set statusline+=%c,%l/%L " column,line/lines
 
 " cd $HOME
 " :let $DESKTOP='C:/users/user/desktop'
@@ -170,32 +184,6 @@ let g:UltiSnipsJumpBackwardTrigger="<c-h>"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 
-" NERDCommenter Configuraiton
-let g:NERDSpaceDelims = 1 " Add spaces after comment delimiters by default
-let g:NERDCompactSexyComs = 1 " Use compact syntax for prettified multi-line comments
-let g:NERDDefaultAlign = 'left' " Align line-wise comment delimiters flush left instead of following code indentation
-let g:NERDAltDelims_java = 1 " Set a language to use its alternate delimiters by default
-let g:NERDCommentEmptyLines = 1 " Allow commenting and inverting empty lines (useful when commenting a region)
-let g:NERDTrimTrailingWhitespace = 1 " Enable trimming of trailing whitespace when uncommenting
-let g:NERDToggleCheckAllLines = 1 " Enable NERDCommenterToggle to check all selected lines is commented or not 
-" let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } } " Add your own custom formats or override the defaults
-let g:NERDCustomDelimiters = {
-            \ 'c': { 'left': '/**','right': '*/' },
-            \ 'js': { 'left': '/**','right': '*/' }
-            \ } " Add your own custom formats or override the defaults
-
-"Uncomment to override defaults:
-"let g:instant_markdown_slow = 1
-"let g:instant_markdown_autostart = 0
-"let g:instant_markdown_open_to_the_world = 1
-"let g:instant_markdown_allow_unsafe_content = 1
-"let g:instant_markdown_allow_external_content = 0
-"let g:instant_markdown_mathjax = 1
-"let g:instant_markdown_logfile = '/tmp/instant_markdown.log'
-"let g:instant_markdown_autoscroll = 0
-"let g:instant_markdown_port = 8888
-"let g:instant_markdown_python = 1
-
 let g:deoplete#enable_at_startup = 1
 
 function g:Multiple_cursors_before()
@@ -205,4 +193,31 @@ function g:Multiple_cursors_after()
   call deoplete#custom#buffer_option('auto_complete', v:true)
 endfunction
 
-echom "remplir le point"
+let g:Lf_WindowPosition = 'popup'
+
+" LSP configurations
+" luado require'lspconfig'.phpactor.setup{}
+let g:phpactorPhpBin = '/home/user/.config/nvim/plugged/phpactor/bin'
+lua << EOF
+require'lspconfig'.phpactor.setup{
+    cmd = { '/home/user/.config/nvim/plugged/phpactor/bin/phpactor' }
+}
+require'lspconfig'.vuels.setup{
+    cmd = { '/home/user/.config/yarn/global/node_modules/.bin/vls' }
+}
+require'lspconfig'.dockerls.setup{
+    cmd = { '/home/user/.config/yarn/global/node_modules/.bin/docker-langserver' }
+}
+require'lspconfig'.bashls.setup{
+    cmd = { '/home/user/.config/yarn/global/node_modules/.bin/bash-language-server' }
+}
+require'lspconfig'.sqlls.setup{
+    cmd = { '/home/user/.config/yarn/global/node_modules/.bin/sql-language-server' }
+}
+EOF
+
+" VIM extensions configurations
+source ~/.config/nvim/config/NERDTree.conf.vim
+
+" LUA extensions configurations
+luafile ~/.config/nvim/lua/eviline.lua
