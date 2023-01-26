@@ -191,7 +191,7 @@ cmp.setup({
     ['<c-space>'] = cmp.mapping.complete(),
     ['<c-n>'] = cmp.mapping.select_next_item(),
     ['<c-e>'] = cmp.mapping.abort(),
-    ['<cR>'] = cmp.mapping.confirm({ select = true })
+    ['<tab>'] = cmp.mapping.confirm({ select = true })
   }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp_signature_help' },
