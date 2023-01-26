@@ -90,7 +90,6 @@ vim.cmd([[
 ]])
 
 -- my UltiSnips configuration
-vim.g.UltiSnipsExpandTrigger = "²²"
 vim.g.UltiSnipsSnippetDirectories = {'~/.config/nvim/UltiSnips'}
 vim.g.UltiSnipsJumpForwardTrigger = "<c-l>"
 vim.g.UltiSnipsJumpBackwardTrigger = "<c-h>"
