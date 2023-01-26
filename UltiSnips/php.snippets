@@ -127,3 +127,38 @@ endsnippet
 snippet loadEntity "load an entity from database"
 $$1 = new C${2:${1/.*/\u$0/}}(${3:\$_POST["id_$1"]});
 endsnippet
+
+snippet symfony6:property_full "Property, getter and setter of a Symfony 6 class"
+private \$$1;
+
+public function get${1/.*/\u$0/}(): $2
+{
+	return \$this->$1;
+}
+
+public function set${1/.*/\u$0/}($2 \$$1 = null): self
+{
+	$this->$1 = \$$1;
+
+	return $this;
+}
+
+endsnippet
+
+snippet symfony6:getter "Getter for a symfony 6 entity property" b
+public function get${1/.*/\u$0/}(): $2
+{
+	return \$this->$1;
+}
+
+endsnippet
+
+snippet symfony6:setter "Setter for a sumfony 6 entity property" b
+public function set${1/.*/\u$0/}($2 \$$1 = null): self
+{
+	$this->$1 = \$$1;
+
+	return $this;
+}
+
+endsnippet
