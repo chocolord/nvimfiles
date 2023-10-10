@@ -1,7 +1,9 @@
 NVimFiles
 ===
 
-This is my VIM configuration, it uses [Vim-Plug](https://github.com/junegunn/vim-plug) to manage plugins, NERDTree, Deoplete, Ale, UltiSnips and other fancy plugins.
+Hello world.
+
+This is my NeoVim configuration, it uses [Lazy](https://github.com/folke/lazy.nvim) to manage plugins, NVIMTree, nvim-cmp, LSP-config, UltiSnips and other fancy plugins.
 
 ## Table of contents
 
@@ -20,18 +22,26 @@ To use this configration you will need to install [nodeJS](https://nodejs.org/) 
 
 1) Clone this repository into your vim confuguration folder (`~/.config/nvim` for linux, `$HOME/AppData/Local/nvim` for windows).
     - Unix: `git clone https://github.com/chocolord/vimfiles ~/.config/nvim`
-    - Windows: `git clone https://github.com/chocolord/vimfiles $HOME/AppData/Local/nvim`
 
 2) Install the plugins with the `:PlugInstall` command
 
 3) Install the node modules needed with the following command (you may need sudo on linux).
 
 ```
-    yarn global add \
-        babel-eslint \
-        csslint \
+    npm -g install \
+        bash-language-server \
+        dockerfile-language-server-nodejs \
         eslint-plugin-vue \
-        eslint_d \
+        eslint \
+        neovim@4.10.1
+        npm@9.8.1
+        prettier \
+        pug-lexer \
+        sql-language-server \
+        typescript \
+        vls \
+        vscode-css-languageservice \
+
 ```
 
 ## Global Settings

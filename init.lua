@@ -1,8 +1,7 @@
 vim.g.python_host_prog = '/usr/bin/python'
 vim.g.python3_host_prog = '/usr/bin/python3'
-vim.g.node_host_prog = '/home/user/.nvm/versions/node/v16.17.1/bin/node'
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -25,17 +24,9 @@ require('lazy').setup({
         lazy = false,
     }, -- LSP configurations
 
-    {
-        "glepnir/lspsaga.nvim",
-        lazy = false,
-        config = function()
-            require("lspsaga").setup({})
-        end,
-        dependencies = { {"nvim-tree/nvim-web-devicons"} }
-    },
-
     { -- LSP status infos
         'j-hui/fidget.nvim',
+        tag = 'legacy',
         config = true,
         dependencies = { 'neovim/nvim-lspconfig' }
     },
@@ -44,19 +35,19 @@ require('lazy').setup({
         'nvim-tree/nvim-tree.lua',
         dependencies = { 'nvim-tree/nvim-web-devicons' }, -- icons
         opts = {
+            disable_netrw = false,
+            hijack_netrw = true,
             sync_root_with_cwd = true,
             git = { ignore = false },
             modified = { enable = true },
-            view = {
-                mappings = {
-                    list = {
-                        { key = { "cd", "<C-]>", "<2-RightMouse>" }, action = "cd" },
-                        { key = "<C-s>", action = "vsplit" },
-                        { key = "l", action = "enter" },
-                        { key = "h", action = "close_node" },
-                    }
-                }
-            }
+            on_attach = function (bufnr)
+                local api = require("nvim-tree.api")
+                api.config.mappings.default_on_attach(bufnr)
+                vim.keymap.set('n', "cd", api.tree.change_root_to_node, { desc = 'nvim-tree: CD', buffer = bufnr, noremap = true, silent = true, nowait = true })
+                vim.keymap.set('n', '<C-s>', api.node.open.vertical, { desc = 'nvim-tree: Open: Vertical Split', buffer = bufnr, noremap = true, silent = true, nowait = true })
+                vim.keymap.set('n', 'l', api.node.open.edit, { desc = 'nvim-tree: Open', buffer = bufnr, noremap = true, silent = true, nowait = true })
+                vim.keymap.set('n', 'h', api.node.navigate.parent_close, { desc = 'nvim-tree: Close Directory', buffer = bufnr, noremap = true, silent = true, nowait = true })
+            end
         }
     }, -- tree explorer
 
@@ -66,7 +57,6 @@ require('lazy').setup({
         'hrsh7th/nvim-cmp',
         dependencies = {
             'neovim/nvim-lspconfig',
-            "glepnir/lspsaga.nvim",
             'hrsh7th/cmp-nvim-lsp', -- completion lsp provider
             'hrsh7th/cmp-nvim-lsp-signature-help', -- completion lsp provider
             'hrsh7th/cmp-buffer', -- completion buffer provier
@@ -150,7 +140,7 @@ require('lazy').setup({
 
     { -- Telescope
         'nvim-telescope/telescope.nvim',
-        tag = '0.1.0',
+        tag = '0.1.2',
         dependencies = { 'nvim-lua/plenary.nvim', "fhill2/telescope-ultisnips.nvim" },
         cmd = "Telescope",
         config = function ()
@@ -169,7 +159,7 @@ require('lazy').setup({
 
             require"telescope".setup{
                 defaults = {
-                    file_ignore_patterns = { "^vendor/" }
+                    file_ignore_patterns = { "^vendor/", "include/Javascript/build/", "node_modules/" }
                 },
                 pickers = {
                     find_files = {
@@ -206,6 +196,13 @@ require('lazy').setup({
         'nvim-treesitter/nvim-treesitter',
         config = true,
         build = ':TSUpdate'
+    },
+
+    { -- Trouble
+        "folke/trouble.nvim",
+        config = function ()
+            require("trouble").setup()
+        end
     },
 
     { -- pretty notifications
@@ -272,15 +269,6 @@ vim.keymap.set("n", "so", require'symbols-outline'.toggle_outline)
 -- neogit
 vim.keymap.set("n", "<leader>ng", require'neogit'.open)
 
--- LSP Configuration
--- Mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
-local opts = { noremap=true, silent=true }
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
-
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -316,36 +304,90 @@ local on_attach = function(client, bufnr)
   vim.keymap.set("n", "<space>lsh", vim.lsp.buf.signature_help, bufopts)
 end
 
-local lsp_flags = { debounce_text_changes = 150, } -- This is the default in Nvim 0.7+
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local capabilities = require('cmp_nvim_lsp').default_capabilities() -- nvim-cmp completion capabilities
 
-require'lspconfig'.phpactor.setup{ on_attach = on_attach, flags = lsp_flags, capabilities = capabilities, }
-require'lspconfig'.vuels.setup{ on_attach = on_attach, flags = lsp_flags, capabilities = capabilities, cmd = { '/home/user/.nvm/versions/node/v16.17.1/bin/vls' } }
--- require'lspconfig'.dockerls.setup{ on_attach = on_attach, flags = lsp_flags, capabilities = capabilities, cmd = { '/home/user/.nvm/versions/node/v16.17.1/bin/docker-langserver' } }
--- require'lspconfig'.bashls.setup{ on_attach = on_attach, flags = lsp_flags, capabilities = capabilities, cmd = { '/home/user/.nvm/versions/node/v16.17.1/bin/bash-language-server' } }
--- require'lspconfig'.sqlls.setup{ on_attach = on_attach, flags = lsp_flags, capabilities = capabilities, cmd = { '/home/user/.nvm/versions/node/v16.17.1/bin/sql-language-server' } }
-require'lspconfig'.sumneko_lua.setup {
+local phpactorOptions = {
+    ["language_server_phpstan.enabled"] = false,
+    ["language_server_psalm.enabled"] = false,
+}
+-- check Symfony 
+local lockFileSearch = vim.fs.find("composer.lock", { upward= true })
+if table.maxn(lockFileSearch) > 0 then
+
+    local findVersion = function (lock, name)
+        local version = "-1"
+
+        -- cherche dans les dépendances
+        for i=1, table.maxn(lock.packages) do
+            local p = lock.packages[i]
+            if p.name == name then
+                version = p.version
+            end
+        end
+
+        -- cherche dans les devDependances sinon
+        if version == "-1" then
+            for i=1, table.maxn(lock["packages-dev"]) do
+                local p = lock["packages-dev"][i]
+                if p.name == name then
+                    version = p.version
+                end
+            end
+        end
+
+        return version
+    end
+
+    local filePath = lockFileSearch[1]
+
+    -- charge le contenu JSON direct dans un objet (table)
+    local file = assert(io.open(filePath), "r")
+    local lock = vim.json.decode(file:read("*all"))
+    file:close()
+
+    -- on veut symfony
+    local symfonyVersion = findVersion(lock, "symfony/symfony")
+
+    if symfonyVersion ~= "-1" then
+        local xml_path = "var/cache/dev/App_KernelDevDebugContainer.xml"
+        if string.find(symfonyVersion, "v2") then
+            xml_path = "var/cache/dev/appDevDebugProjectContainer.xml"
+        elseif string.find(symfonyVersion, "v3") then
+            xml_path = "var/cache/dev/appDevDebugProjectContainer.xml"
+        end
+
+        phpactorOptions["symfony.enabled"] = true
+        phpactorOptions["symfony.xml_path"] = xml_path
+        phpactorOptions["indexer.exclude_patterns"] = '["/vendor/**/Tests/**/*","/vendor/**/tests/**/*","/var/cache/**/*","/vendor/composer/**/*"]'
+    end
+
+    -- on veut phpstan et psalm
+    phpactorOptions["language_server_php_cs_fixer.enabled"] = "-1" ~= findVersion(lock, "friendsofphp/php-cs-fixer")
+    phpactorOptions["language_server_phpstan.enabled"] = "-1" ~= findVersion(lock, "phpstan/phpstan")
+    phpactorOptions["language_server_phpunit.enabled"] = "-1" ~= findVersion(lock, "phpunit/phpunit")
+    phpactorOptions["language_server_prophecy.enabled"] = "-1" ~= findVersion(lock, "phpspec/prophecy")
+    phpactorOptions["language_server_psalm.enabled"] = "-1" ~= findVersion(lock, "psalm/psalm")
+end
+require'lspconfig'.phpactor.setup{ on_attach = on_attach, init_options = phpactorOptions }
+require'lspconfig'.vuels.setup{ on_attach = on_attach, capabilities = capabilities }
+require'lspconfig'.dockerls.setup{ on_attach = on_attach, capabilities = capabilities }
+require'lspconfig'.bashls.setup{ on_attach = on_attach, capabilities = capabilities }
+require'lspconfig'.sqlls.setup{ on_attach = on_attach, capabilities = capabilities }
+
+require'lspconfig'.lua_ls.setup {
     on_attach = on_attach,
-    flags = lsp_flags,
+    -- flags = lsp_flags,
     capabilities = capabilities,
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
-      },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
-      },
+    settings = {
+        Lua = {
+            -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+            runtime = { version = 'LuaJIT', },
+            -- Get the language server to recognize the `vim` global
+            diagnostics = { globals = {'vim'}, },
+            -- Make the server aware of Neovim runtime files
+            workspace = { library = vim.api.nvim_get_runtime_file("", true), },
+            -- Do not send telemetry data containing a randomized but unique identifier
+            telemetry = { enable = false, },
+        },
     },
-  },
 }
