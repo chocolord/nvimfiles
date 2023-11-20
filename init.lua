@@ -77,10 +77,12 @@ require('lazy').setup({
                 window = {},
                 mapping = cmp.mapping.preset.insert({
                     ['<c-f>'] = cmp.mapping.scroll_docs(4),
-                    ['<c-b>'] = cmp.mapping.select_prev_item(-4),
+                    ['<c-b>'] = cmp.mapping.scroll_docs(-4),
                     ['<c-space>'] = cmp.mapping.complete(),
+                    ['<c-g>'] = cmp.mapping.select_prev_item(),
                     ['<c-n>'] = cmp.mapping.select_next_item(),
                     ['<c-e>'] = cmp.mapping.abort(),
+                    -- ['<tab>'] = cmp.mapping.confirm({ select = true })
                     ['<tab>'] = cmp.mapping.confirm({ select = true })
                 }),
                 sources = cmp.config.sources({
@@ -114,12 +116,15 @@ require('lazy').setup({
     { 'lewis6991/gitsigns.nvim', config = true }, -- Git decorations
 
     { -- Git GUI
-        'TimUntersberger/neogit',
+        'NeogitOrg/neogit',
         config = true,
         dependencies = { 'nvim-lua/plenary.nvim' }, -- Lua library
     },
 
-    { 'simrat39/symbols-outline.nvim' }, -- view for Symbols with LSP
+    { -- view for Symbols with LSP
+        'simrat39/symbols-outline.nvim',
+        config = true
+    },
 
     { -- Image viewer
         'samodostal/image.nvim',
@@ -207,6 +212,11 @@ require('lazy').setup({
 
     { -- pretty notifications
         'rcarriga/nvim-notify',
+        config = true
+    },
+
+    { -- Lsp Lines
+        "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
         config = true
     }
 })
