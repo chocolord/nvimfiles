@@ -1,0 +1,125 @@
+*custom-config.txt*	Configuration personnalisée
+
+			utilisez |gO| pour le sommaire
+==============================================================================
+MAPPINGS						  *custom-mappings*
+
+Note: Certains mappings utilisent la touche <leader> qui est mappée sur la
+touche "-" (moins)
+
+
+Mode	Mapping		Description ~
+------------------------------------------------------------------------------
+1. Mappgins globaux	
+
+				    *jk* |switching|
+Insert	jk		Revenir au mode normal.
+
+				    |mapleader|
+Normal	<Space>		Raccourcis pour la touche leader
+
+				    |k| |j| |navigation|
+Normal	<c-k>		déplace le curseur de 30 lignes vers le haut.
+Normal	<c-j>		déplace  le curseur de 30 lignes vers le bas.
+				    
+				    'hlsearch' 'hls' |:nohlsearch|
+Normal	<leader><c-s>	(Dés)Active le surlignage des résultats de recherche.
+			Note ne semble pas fonctionner avec WSL
+
+				    |clipboard|
+Insert	<S-Insert>	Colle le contenu du presse-papier.
+			Note ne semble pas fonctionner avec WSL
+
+2. NvimTreeToggle				*custom-mappings.nvim-tree*
+
+				    `:NvimTreeToggle`
+Normal	nt		Ouvre ou ferme le navigateur
+
+				    `:NvimTreeFindFile`
+Normal	<leader>nf	Trouve le fichier dans le navigateur
+
+
+3. Telescope 					*custom-mappings.telescope*
+
+				    |:Telescope|
+Normal	<leader>fp	Ouvre la fenêtre |Telescope| 
+Normal	<leader>ff	Ouvre la fenêtre |Telescope| avec le picker `find_files`
+Normal	<leader>fg	Ouvre la fenêtre |Telescope| avec le picker `live_grep`
+Normal	<leader>fb	Ouvre la fenêtre |Telescope| avec le picker `buffers`
+Normal	<leader>fh	Ouvre la fenêtre |Telescope| avec le picker `help_tags`
+Normal	<leader>fd	Ouvre la fenêtre |Telescope| avec le picker `diagnostics`
+
+4. Symbols Outline			 *custom-mappings.symbols-outline*
+
+				    |symbols-outline|
+Normal	so 		Ouvre ou ferme la fenêtre SymbolsOutline
+
+5. Neogit					*custom-mappings.neogit*
+
+				    |neogit_commands| |:Neogit|
+Normal	<leader>ng	Ouvre la fenêtre |neogit|.
+
+6. LSP						*custom-mappings.lsp*
+
+				    |vim.lsp|
+Normal	gD		vas à la déclaration.
+Normal	gd		vas à la définition.
+Normal	K		Affiche la documentation dans une popup.
+Normal	gi		vas à l'implémentation.
+Normal	<C-h>		Affiche l'aide de la signature dans une popup.
+Normal	wa		Ajout un dossier au workspace.
+Normal	wr		Supprime un dossier du workspace.
+Normal	wl		Liste les dossiers du workspace
+Normal	<space>D	vas à la définition du type
+Normal	<space>rn	renomme le symbole
+Normal	<space>ca	Ouvre les code-actions 
+Normal	gr 		Cherche les références
+Normal	<space>F	Formatte le fichier
+
+>
+    MAPPTINGS MANUELS
+<
+Normal	<space>la	Ouvre les code-actions.
+Normal	<space>lh	Affiche la documentation dans une popup.
+Normal	<space>ldf	vas à la définition.
+Normal	<space>ldh	???
+Normal	<space>lds	Ouvre les symboles.
+Normal	<space>lrn	Renomme le symbole.
+Normal	<space>lsh	Affiche l'aide de la signature dans une popup.
+
+
+==============================================================================
+COMMANDS						*custom-commands*
+
+:Latin1			*:Latin1*
+		Reouvre le fichier avec l'encodage de caractères |Latin1|
+		`:edit ++enc=latin1`
+
+:Utf8			*:Utf8*
+		Reouvre le fichier avec l'encodage de caractères |Utf8|.
+		`:edit ++enc=utf8`
+
+==============================================================================
+OPTIONS							*custom-options*
+'autoindent': true
+'number': true
+'tabstop': 4
+'shiftwidth': 4
+'expandtab': true
+'swapfile': false
+'compatible': false
+'modeline': true
+'modelines': 5
+'hlsearch': false
+'mouse': "a"
+'fileformat': "unix"
+'scrolloff': 6
+'clipboard': "unnamedplus"
+'visualbell': true
+'completeopt': "menu,menuone,noselect"
+'fileencodings': "utf-8"
+'fileencoding': "utf-8"
+'encoding': "utf-8"
+'mapleader': "-"
+
+ vim:tw=78:ts=8:noet:ft=help:norl:

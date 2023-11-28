@@ -1,0 +1,13 @@
+!_TAG_FILE_ENCODING	utf-8	//
+:Latin1	custom-config.txt	/*:Latin1*
+:Utf8	custom-config.txt	/*:Utf8*
+custom-commands	custom-config.txt	/*custom-commands*
+custom-config.txt	custom-config.txt	/*custom-config.txt*
+custom-mappings	custom-config.txt	/*custom-mappings*
+custom-mappings.lsp	custom-config.txt	/*custom-mappings.lsp*
+custom-mappings.neogit	custom-config.txt	/*custom-mappings.neogit*
+custom-mappings.nvim-tree	custom-config.txt	/*custom-mappings.nvim-tree*
+custom-mappings.symbols-outline	custom-config.txt	/*custom-mappings.symbols-outline*
+custom-mappings.telescope	custom-config.txt	/*custom-mappings.telescope*
+custom-options	custom-config.txt	/*custom-options*
+jk	custom-config.txt	/*jk*
