@@ -316,69 +316,7 @@ end
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities() -- nvim-cmp completion capabilities
 
-local phpactorOptions = {
-    ["language_server_phpstan.enabled"] = false,
-    ["language_server_psalm.enabled"] = false,
-}
--- check Symfony 
-local lockFileSearch = vim.fs.find("composer.lock", { upward= true })
-if table.maxn(lockFileSearch) > 0 then
-
-    local findVersion = function (lock, name)
-        local version = "-1"
-
-        -- cherche dans les dépendances
-        for i=1, table.maxn(lock.packages) do
-            local p = lock.packages[i]
-            if p.name == name then
-                version = p.version
-            end
-        end
-
-        -- cherche dans les devDependances sinon
-        if version == "-1" then
-            for i=1, table.maxn(lock["packages-dev"]) do
-                local p = lock["packages-dev"][i]
-                if p.name == name then
-                    version = p.version
-                end
-            end
-        end
-
-        return version
-    end
-
-    local filePath = lockFileSearch[1]
-
-    -- charge le contenu JSON direct dans un objet (table)
-    local file = assert(io.open(filePath), "r")
-    local lock = vim.json.decode(file:read("*all"))
-    file:close()
-
-    -- on veut symfony
-    local symfonyVersion = findVersion(lock, "symfony/symfony")
-
-    if symfonyVersion ~= "-1" then
-        local xml_path = "var/cache/dev/App_KernelDevDebugContainer.xml"
-        if string.find(symfonyVersion, "v2") then
-            xml_path = "var/cache/dev/appDevDebugProjectContainer.xml"
-        elseif string.find(symfonyVersion, "v3") then
-            xml_path = "var/cache/dev/appDevDebugProjectContainer.xml"
-        end
-
-        phpactorOptions["symfony.enabled"] = true
-        phpactorOptions["symfony.xml_path"] = xml_path
-        phpactorOptions["indexer.exclude_patterns"] = '["/vendor/**/Tests/**/*","/vendor/**/tests/**/*","/var/cache/**/*","/vendor/composer/**/*"]'
-    end
-
-    -- on veut phpstan et psalm
-    phpactorOptions["language_server_php_cs_fixer.enabled"] = "-1" ~= findVersion(lock, "friendsofphp/php-cs-fixer")
-    phpactorOptions["language_server_phpstan.enabled"] = "-1" ~= findVersion(lock, "phpstan/phpstan")
-    phpactorOptions["language_server_phpunit.enabled"] = "-1" ~= findVersion(lock, "phpunit/phpunit")
-    phpactorOptions["language_server_prophecy.enabled"] = "-1" ~= findVersion(lock, "phpspec/prophecy")
-    phpactorOptions["language_server_psalm.enabled"] = "-1" ~= findVersion(lock, "psalm/psalm")
-end
-require'lspconfig'.phpactor.setup{ on_attach = on_attach, init_options = phpactorOptions }
+require'lspconfig'.phpactor.setup{ on_attach = on_attach, capabilities = capabilities }
 require'lspconfig'.vuels.setup{ on_attach = on_attach, capabilities = capabilities }
 require'lspconfig'.dockerls.setup{ on_attach = on_attach, capabilities = capabilities }
 require'lspconfig'.bashls.setup{ on_attach = on_attach, capabilities = capabilities }
