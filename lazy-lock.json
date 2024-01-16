@@ -28,5 +28,6 @@
   "trouble.nvim": { "branch": "main", "commit": "f1168feada93c0154ede4d1fe9183bf69bac54ea" },
   "twig.vim": { "branch": "master", "commit": "014cd47d795351f0f19f48323a3399831842d295" },
   "vim-multiple-cursors": { "branch": "master", "commit": "6456718e1d30b42c04b920c5413ca44f68f08759" },
+  "vim-snippets": { "branch": "master", "commit": "ba72b08e04e184ecd0a2a1b8012a81ddb040dbc3" },
   "vim-surround": { "branch": "master", "commit": "3d188ed2113431cf8dac77be61b842acb64433d9" }
 }

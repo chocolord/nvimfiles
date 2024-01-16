@@ -126,6 +126,11 @@ require('lazy').setup({
         "L3MON4D3/LuaSnip",
         -- follow latest release.
         version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+        dependencies = { 'honza/vim-snippets' },
+        config = function (opts)
+            require'luasnip'.setup(opts)
+            require'luasnip.loaders.from_snipmate'.lazy_load()
+        end
         -- install jsregexp (optional!).
         -- build = "make install_jsregexp"
     },
