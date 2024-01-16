@@ -62,7 +62,7 @@ require('lazy').setup({
             'hrsh7th/cmp-buffer', -- completion buffer provier
             'hrsh7th/cmp-path', -- completion path tool
             'hrsh7th/cmp-cmdline', -- completion cmdline
-            'quangnguyen30192/cmp-nvim-ultisnips', -- UltiSnips provider
+            'saadparwaiz1/cmp_luasnip', -- LuapSnip provider
         },
         lazy = false,
         config = function ()
@@ -71,7 +71,7 @@ require('lazy').setup({
             cmp.setup({
                 snippet = {
                     expand = function(args)
-                        vim.fn["UltiSnips#Anon"](args.body)
+                        require('luasnip').lsp_expand(args.body)
                     end,
                 },
                 window = {},
@@ -82,30 +82,25 @@ require('lazy').setup({
                     ['<c-g>'] = cmp.mapping.select_prev_item(),
                     ['<c-n>'] = cmp.mapping.select_next_item(),
                     ['<c-e>'] = cmp.mapping.abort(),
-                    -- ['<tab>'] = cmp.mapping.confirm({ select = true })
                     ['<tab>'] = cmp.mapping.confirm({ select = true })
                 }),
                 sources = cmp.config.sources({
-                    { name = 'ultisnips' },
                     { name = 'nvim_lsp_signature_help' },
                     { name = 'nvim_lsp' },
+                    { name = 'luasnip' },
                     { name = 'buffer' },
                 })
             })
         end
     }, -- Completion tool
 
-    { -- Snippets engine
-        'SirVer/ultisnips',
-        dependencies = { 'honza/vim-snippets' }, -- Common snippets
-        init = function () -- my UltiSnips configuration
-            vim.g.UltiSnipsExpandTrigger = '²²'
-            vim.g.UltiSnipsSnippetDirectories = {'~/.config/nvim/UltiSnips'}
-            vim.g.UltiSnipsJumpForwardTrigger = "<c-l>"
-            vim.g.UltiSnipsJumpBackwardTrigger = "<c-h>"
-            vim.g.UltiSnipsEditSplit = "vertical"
-        end
-    }, -- Snippets engine
+    {
+        "L3MON4D3/LuaSnip",
+        -- follow latest release.
+        version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+        -- install jsregexp (optional!).
+        -- build = "make install_jsregexp"
+    },
 
     { 'terryma/vim-multiple-cursors' }, -- Multiple cursors
 
@@ -292,6 +287,17 @@ vim.keymap.set("n", "so", require'symbols-outline'.toggle_outline)
 
 -- neogit
 vim.keymap.set("n", "<leader>ng", require'neogit'.open)
+
+-- LuaSnip keymaps
+-- vim.keymap.set({"i"}, "<C-K>", function() ls.expand() end, {silent = true}) 
+vim.keymap.set({"i", "s"}, "<C-L>", function() require'luasnip'.jump( 1) end, {silent = true})
+vim.keymap.set({"i", "s"}, "<C-J>", function() require'luasnip'.jump(-1) end, {silent = true})
+
+vim.keymap.set({"i", "s"}, "<C-E>", function()
+	if require'luasnip'.choice_active() then
+		require'luasnip'.change_choice(1)
+	end
+end, {silent = true})
 
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
