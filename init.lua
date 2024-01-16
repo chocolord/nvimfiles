@@ -67,15 +67,17 @@ require('lazy').setup({
         lazy = false,
         config = function ()
             local cmp = require'cmp'
+            local luasnip = require'luasnip'
 
             cmp.setup({
                 snippet = {
                     expand = function(args)
-                        require('luasnip').lsp_expand(args.body)
+                        luasnip.lsp_expand(args.body)
                     end,
                 },
                 window = {},
                 mapping = cmp.mapping.preset.insert({
+                    --[[
                     ['<c-f>'] = cmp.mapping.scroll_docs(4),
                     ['<c-b>'] = cmp.mapping.scroll_docs(-4),
                     ['<c-space>'] = cmp.mapping.complete(),
@@ -83,6 +85,32 @@ require('lazy').setup({
                     ['<c-n>'] = cmp.mapping.select_next_item(),
                     ['<c-e>'] = cmp.mapping.abort(),
                     ['<tab>'] = cmp.mapping.confirm({ select = true })
+                    ]]
+                    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+                    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+                    ['<C-Space>'] = cmp.mapping.complete(),
+                    ['<CR>'] = cmp.mapping.confirm {
+                        behavior = cmp.ConfirmBehavior.Replace,
+                        select = true,
+                    },
+                    ['<Tab>'] = cmp.mapping(function(fallback)
+                        if cmp.visible() then
+                            cmp.select_next_item()
+                        elseif luasnip.expand_or_jumpable() then
+                            luasnip.expand_or_jump()
+                        else
+                            fallback()
+                        end
+                    end, { 'i', 's' }),
+                    ['<S-Tab>'] = cmp.mapping(function(fallback)
+                        if cmp.visible() then
+                            cmp.select_prev_item()
+                        elseif luasnip.jumpable(-1) then
+                            luasnip.jump(-1)
+                        else
+                            fallback()
+                        end
+                    end, { 'i', 's' }),
                 }),
                 sources = cmp.config.sources({
                     { name = 'nvim_lsp_signature_help' },
@@ -331,13 +359,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
 local capabilities = require('cmp_nvim_lsp').default_capabilities() -- nvim-cmp completion capabilities
 
 local lspconfig = require'lspconfig'
-lspconfig.phpactor.setup{ capabilities = capabilities }
-lspconfig.vuels.setup{ capabilities = capabilities }
-lspconfig.dockerls.setup{ capabilities = capabilities }
-lspconfig.bashls.setup{ capabilities = capabilities }
-lspconfig.sqlls.setup{ capabilities = capabilities }
+local servers = { 'phpactor', 'vuels', 'dockerls', 'bashls', 'sqlls' }
+for _, lsp in ipairs(servers) do
+    lspconfig[lsp].setup { capabilities = capabilities }
+end
 
-require'lspconfig'.lua_ls.setup {
+lspconfig.lua_ls.setup {
     -- flags = lsp_flags,
     capabilities = capabilities,
     settings = {
