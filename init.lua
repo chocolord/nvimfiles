@@ -174,7 +174,7 @@ require('lazy').setup({
     { -- Telescope
         'nvim-telescope/telescope.nvim',
         tag = '0.1.2',
-        dependencies = { 'nvim-lua/plenary.nvim', "fhill2/telescope-ultisnips.nvim" },
+        dependencies = { 'nvim-lua/plenary.nvim' },
         cmd = "Telescope",
         config = function ()
             local function find_file(prompt_bufnr)
@@ -215,7 +215,6 @@ require('lazy').setup({
         init =
             function ()
                 require"telescope".load_extension"notify"
-                require"telescope".load_extension"ultisnips"
             end
     }, -- Telescope
 
@@ -240,7 +239,8 @@ require('lazy').setup({
 
     { -- pretty notifications
         'rcarriga/nvim-notify',
-        config = true
+        config = true,
+        lazy = false
     },
 
     { -- Lsp Lines
@@ -289,17 +289,33 @@ vim.opt.encoding = "utf-8"
 vim.g.mapleader = "-"
 vim.cmd.syntax('on')
 vim.cmd.colorscheme('nightfox')
+vim.notify = require("notify")
 
 -- my functions
 vim.api.nvim_create_user_command("Latin1", "edit ++enc=latin1", {})
 vim.api.nvim_create_user_command("Utf8", "edit ++enc=utf8", {})
+vim.api.nvim_create_user_command("ControlM", "echo \"^M se fait avec \\^Q\\^M\"", {})
+vim.api.nvim_create_user_command("ClearControlM", "%s/<c-m>//", {})
+vim.api.nvim_create_user_command("TSFold",
+    function ()
+        vim.opt.foldmethod = "expr"
+        vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+    end,
+    {}
+)
+vim.api.nvim_create_user_command("TSBufFold",
+    function ()
+        vim.opt_local.foldmethod = "expr"
+        vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
+    end,
+    {}
+)
 
 -- my mappings
 vim.keymap.set("i", "jk", "<esc>")
 vim.keymap.set("n", "<space>", "-", { remap = true, desc = "map spacebar to the leader" } )
 vim.keymap.set("n", "<c-j>", "30j")
 vim.keymap.set("n", "<c-k>", "30k")
-vim.keymap.set("n", "<leader><c-s>", function() vim.opt_local.hlsearch = vim.opt_local.hlsearch and false or true end)
 vim.keymap.set("i", "<S-Insert>", "<C-R>*")
 
 -- my nvim-tree mappings
